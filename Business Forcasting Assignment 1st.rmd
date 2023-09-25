@@ -1,0 +1,154 @@
+---
+title: "Assignment 1st"
+author: " Shubham Bhargava:sb2509@scarletmail.rutgers.edu"
+date: "09/24/2023"
+output: html_document
+---
+
+# Typical Industries Employee Survey
+
+```{r, message=FALSE}
+# Reading the excel file
+library(readxl)
+Typical_Employee_Survey_Data <- read_excel("C:/Users/HP/Downloads/Typical_Employee_Survey_Data.xlsx")
+View(Typical_Employee_Survey_Data)
+
+```
+
+
+#### 1. Creating header Row
+```{r}
+names(Typical_Employee_Survey_Data) <- c('Age','Gender','Job_Satisfaction','Job_Preference','years_with_current_employer','Promotion_Likelihood','Decision_making_Involvement','Budget_Participation','Job_Pride','Job_Loyalty','Workplace_relation')
+names(Typical_Employee_Survey_Data)
+
+
+```
+
+
+#### 2.Print out the 5-point summary and boxplot for each column
+
+```{r}
+summary(Typical_Employee_Survey_Data)
+boxplot(Typical_Employee_Survey_Data$Age, main = 'Age of people', ylab = 'Range of Age', col = 'Red')
+boxplot(Typical_Employee_Survey_Data$years_with_current_employer, main = 'Years with current Employer', ylab = 'Range of years', col = 'Red')
+#boxplot for others column as type is numeric, before factoring
+boxplot(Typical_Employee_Survey_Data$Gender, main = 'Gender of people', ylab = 'Range of Gender from 1 to 2', col = 'Red')
+boxplot(Typical_Employee_Survey_Data$Job_Satisfaction, main = 'Job Satisfaction', ylab = 'Range of Satisfaction', col = 'Red')
+boxplot(Typical_Employee_Survey_Data$Job_Preference, main = 'Imp Job Characteristics', ylab = 'Range of Preference', col = 'Red')
+boxplot(Typical_Employee_Survey_Data$Promotion_Likelihood, main = 'Likelihood of getting promoted', ylab = 'Range of Promotion Likelihood', col = 'Red')
+boxplot(Typical_Employee_Survey_Data$Decision_making_Involvement, main = 'Involvement in making decision', ylab = 'Range of decision involvement', col = 'Red')
+boxplot(Typical_Employee_Survey_Data$Budget_Participation, main = 'Participation in Budgetary decision', ylab = 'Range of Budgetary Decision', col = 'Red')
+boxplot(Typical_Employee_Survey_Data$Job_Pride, main = 'Pride level working for the Organization', ylab = 'Range of pride level', col = 'Red')
+boxplot(Typical_Employee_Survey_Data$Job_Loyalty, main = 'Loyalty level for the Organization', ylab = 'Range of loyalty level', col = 'Red')
+boxplot(Typical_Employee_Survey_Data$Workplace_relation, main = 'Level of workplace relation', ylab = 'Range of relation level', col = 'Red')
+
+
+
+
+```
+
+
+#### 3.Convert the columns that need to be converted to Factors
+
+```{r}
+Typical_Employee_Survey_Data$Gender <- factor(Typical_Employee_Survey_Data$Gender, levels = c(1, 2), labels = c("Male", "Female"))
+Typical_Employee_Survey_Data$Job_Satisfaction <- as.factor(Typical_Employee_Survey_Data$Job_Satisfaction)
+Typical_Employee_Survey_Data$Job_Preference <- as.factor(Typical_Employee_Survey_Data$Job_Preference)
+Typical_Employee_Survey_Data$Promotion_Likelihood <- as.factor(Typical_Employee_Survey_Data$Promotion_Likelihood)
+Typical_Employee_Survey_Data$Decision_making_Involvement <- as.factor(Typical_Employee_Survey_Data$Decision_making_Involvement)
+Typical_Employee_Survey_Data$Budget_Participation <- as.factor(Typical_Employee_Survey_Data$Budget_Participation)
+Typical_Employee_Survey_Data$Job_Pride <- as.factor(Typical_Employee_Survey_Data$Job_Pride)
+Typical_Employee_Survey_Data$Job_Loyalty <- as.factor(Typical_Employee_Survey_Data$Job_Loyalty)
+Typical_Employee_Survey_Data$Workplace_relation <- as.factor(Typical_Employee_Survey_Data$Workplace_relation)
+str(Typical_Employee_Survey_Data)
+summary(Typical_Employee_Survey_Data)
+
+```
+
+
+#### 4.Plot the right visual for each column
+
+```{r}
+hist(Typical_Employee_Survey_Data$Age,main = 'Employee Age', ylab='Number of Employees', xlab='Frequncy of Age',col='Yellow',border='orange', xlim = c(20,70))
+
+#* Pie chart for Gender distribution
+pie_data <- table(Typical_Employee_Survey_Data$Gender)
+total_count <- sum(pie_data)
+labels <- paste(c("Male","Female"), ": ", pie_data,"(",round(pie_data/total_count*100,1),"%)")
+pie(pie_data,main = "Gender Distribution",label= labels,col = c("black", "purple"))
+
+#*barplot for Job satisfaction
+barplotJS <- table(Typical_Employee_Survey_Data$Job_Satisfaction)
+barplot(barplotJS , main='Job Satisfaction Plot', names.arg= c("Very Satisfied","Moderately Satisfied","Dissatisfied","Very Dissatisfied"),ylab = 'count of Employees', xlab='Satisfaction level', col = 'lightBlue', ylim=c(0,70))
+
+#* Job Preference plot
+pie_dataJP <- table(Typical_Employee_Survey_Data$Job_Preference)
+total_countJP <- sum(pie_dataJP)
+labels <- paste(c("High Income","No Danger of Being Fired","Flexible Hours","Opportunities for Advancement","Enjoying the Work"), ": ", pie_dataJP,"(",round(pie_dataJP/total_countJP*100,1),"%)")
+pie(pie_dataJP,main = "Imp Job Characteristic",label= labels,col = c("black", "purple",'grey','blue','orange'))
+
+
+#* Working years with current employer
+hist(Typical_Employee_Survey_Data$years_with_current_employer,main = 'Years with current Employer', ylab = 'Number of Employees', col = 'lightBlue', xlab='Range of Experience', xlim=c(0,60),ylim=c(0,70))
+
+#*how likely to get promoted
+barplotLP <- table(Typical_Employee_Survey_Data$Promotion_Likelihood)
+barplot(barplotLP , main='Likelihood of getting promoted', names.arg= c("Very Likely","Likely","Not Sure","Unlikely","Very Unlikely"),ylab = 'Number of Employees', xlab='likelihood level', col = 'lightBlue')
+
+#*part in making decisions
+pie_dataDMI <- table(Typical_Employee_Survey_Data$Decision_making_Involvement)
+total_countDMI <- sum(pie_dataDMI)
+labels <- paste(c("Always","Much of the Time","Sometimes","Never"), ": ", pie_dataDMI,"(",round(pie_dataDMI/total_countDMI*100,1),"%)")
+pie(pie_dataDMI,main = "Involvement in making decision",label= labels,col = c("orange", "blue",'purple','black','white'))
+
+#*participate in budgetary decisions
+barplotBD <- table(Typical_Employee_Survey_Data$Budget_Participation)
+barplot(barplotBD , main='Participation in Budgetary decision', names.arg= c("Yes","No"),ylab = 'Number of Employees', xlab='Budgetary decision', col = 'lightBlue', ylim=c(0,70))
+
+#*pride level working for this organization
+pie_dataJbP <- table(Typical_Employee_Survey_Data$Job_Pride)
+total_countJbP <- sum(pie_dataJbP)
+labels <- paste(c("Very Proud","Somewhat Proud","Indifferent","Not At All Proud"), ": ", pie_dataJbP,"(",round(pie_dataJbP/total_countJbP*100,1),"%)")
+pie(pie_dataJbP,main = "Pride level working for the Organization",label= labels,col = c("black", "purple",'yellow','orange'))
+
+#*Loyalty with this organization
+barplotJL <- table(Typical_Employee_Survey_Data$Job_Loyalty)
+barplot(barplotJL , main='Loyalty level for the Organization', names.arg= c("Very Likely","Likely","Not Sure","Unlikely","Very Unlikely"),ylab = 'Number of Employees', xlab='Loyalty Level', ylim=c(0,70))
+
+barplotWR <- table(Typical_Employee_Survey_Data$Workplace_relation)
+barplot(barplotWR , main='Level of workplace relation', names.arg= c("Very Good","Good","So So","Bad"),ylab = 'Number of Employees', xlab='Work relation Level', ylim=c(0,60))
+
+```
+
+#### 5.Plot scatter plots to show few relationships
+
+*As numerical columns available are year of employment and Employees Age Scatter plot is drawn
+```{r}
+# Highest density is present between employee age 30 to 40 yrs
+plot(Typical_Employee_Survey_Data$Age,Typical_Employee_Survey_Data$years_with_current_employer, main="Employee Age VS. year of employment", xlab="Employee Age", ylab="year of employment",col='blue',pch=19)
+```
+
+*From the given plot we can infer that majority of workforce participating in survey, 
+comprises of people within the age 20-40 with overall experience of less that 10 years within company.
+
+```{r}
+#Below are additional relations plot:
+#year of employment and promotion likelihood
+plot(Typical_Employee_Survey_Data$Promotion_Likelihood,Typical_Employee_Survey_Data$years_with_current_employer, main="year of employment VS. promotion likelihood", xlab="Promotion likelihood Rating 1 being Very Likely", ylab="year of employment",col='black')
+
+#year of employment Vs. Job Pride
+plot(Typical_Employee_Survey_Data$Job_Pride,Typical_Employee_Survey_Data$years_with_current_employer, main="year of employment VS. Job Pride", xlab="Job Pride Rating 1 being Very Proud", ylab="year of employment",col='grey')
+
+#year of employment and Job Loyalty
+plot(Typical_Employee_Survey_Data$Job_Loyalty,Typical_Employee_Survey_Data$years_with_current_employer, main="year of employment Vs. Job Loyalty", xlab="Job Loyalty 1 being Very Likely", ylab="Years of Employment",col='purple')
+
+
+
+
+
+
+
+
+
+
+```
